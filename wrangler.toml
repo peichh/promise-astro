@@ -5,7 +5,7 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "promise-db"
-database_id = "promise-db"
+database_id = "02f62157-5c71-4b8a-8423-abb3c9a5c35c"
 
 [[r2_buckets]]
 binding = "SLIPS"
