@@ -1,24 +1,33 @@
 <!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ตั้งค่าดวงเกิด - PROMISE</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-[#FFF8F0] p-6">
-<div class="max-w-2xl mx-auto bg-white rounded-[24px] p-8 shadow-xl mt-10">
-<h1 class="text-2xl font-bold">ตั้งค่าข้อมูลดวงเกิด ผูกกับรหัสของคุณ</h1><p class="text-sm opacity-60">ข้อมูลนี้จะถูกล็อคและใช้ประกอบทุกคำทำนาย แก้ไขได้แต่ต้องยืนยันตัวตน</p>
-<form id="form" class="mt-6 grid grid-cols-2 gap-4">
-<input id="birth_date" type="date" class="px-4 py-3 rounded-xl border col-span-2" required>
-<input id="birth_time" type="time" class="px-4 py-3 rounded-xl border">
-<select id="birth_province" class="px-4 py-3 rounded-xl border"><option>สระแก้ว</option><option>กรุงเทพ</option><option>เชียงใหม่</option><option>ขอนแก่น</option><option>ภูเก็ต</option><option>77 จังหวัด (โหลดจาก D1 ได้)</option></select>
-<input id="gender" placeholder="เพศ/อัตลักษณ์" class="px-4 py-3 rounded-xl border">
-<input id="lgbtq" placeholder="เช่น Bottom / Top / Non-binary" class="px-4 py-3 rounded-xl border">
-<button class="col-span-2 py-3 rounded-xl bg-black text-white">บันทึกและสร้างหนังสือของฉัน</button>
-</form>
-</div>
+<body class="min-h-screen bg-[#09090b] p-6 text-stone-100">
+<div class="mx-auto mt-10 max-w-2xl rounded-[24px] border border-amber-100/10 bg-[#141416] p-8 shadow-2xl shadow-black/40">
+<h1 class="text-2xl font-semibold tracking-wide text-amber-100">ตั้งค่าข้อมูลดวงเกิด</h1><p class="mt-2 text-sm text-stone-400">ข้อมูลนี้ใช้ประกอบทุกคำทำนาย คุณแก้ไขได้ภายหลัง</p>
+<form id="form" class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+<label class="text-sm text-stone-300 sm:col-span-2">วันเกิด<input id="birth_date" name="birth_date" type="date" class="mt-2 w-full rounded-xl border border-stone-700 bg-[#202023] px-4 py-3 text-white [color-scheme:dark]" required></label>
+<label class="text-sm text-stone-300">เวลาเกิด<input id="birth_time" name="birth_time" type="time" class="mt-2 w-full rounded-xl border border-stone-700 bg-[#202023] px-4 py-3 text-white [color-scheme:dark]"></label>
+<label class="text-sm text-stone-300">สถานที่เกิด<select id="birth_province" name="birth_province" class="mt-2 w-full rounded-xl border border-stone-700 bg-[#202023] px-4 py-3 text-white"><option value="กรุงเทพมหานคร" selected>กรุงเทพมหานคร (Bangkok, Thailand)</option><option value="สระแก้ว">สระแก้ว</option><option value="เชียงใหม่">เชียงใหม่</option><option value="ขอนแก่น">ขอนแก่น</option><option value="ภูเก็ต">ภูเก็ต</option><option value="อื่นๆ">อื่นๆ</option></select></label>
+<label class="text-sm text-stone-300">เพศ / อัตลักษณ์<select id="gender" name="gender" class="mt-2 w-full rounded-xl border border-stone-700 bg-[#202023] px-4 py-3 text-white"><option value="">ไม่ประสงค์ระบุ</option><option value="หญิง">หญิง (Female)</option><option value="ชาย">ชาย (Male)</option><option value="หญิงข้ามเพศ">หญิงข้ามเพศ (Transgender woman / สาวสอง)</option><option value="ชายข้ามเพศ">ชายข้ามเพศ (Transgender man)</option><option value="นอนไบนารี">Non-binary / นอนไบนารี</option><option value="อื่นๆ">อื่นๆ</option></select></label>
+<label class="text-sm text-stone-300">รสนิยมทางเพศ / ความรัก<select id="orientation" name="orientation" class="mt-2 w-full rounded-xl border border-stone-700 bg-[#202023] px-4 py-3 text-white"><option value="">ไม่ประสงค์ระบุ</option><option value="ชอบผู้ชาย">ชอบผู้ชาย (Attracted to men)</option><option value="ชอบผู้หญิง">ชอบผู้หญิง (Attracted to women)</option><option value="ชอบทุกเพศ">ชอบทุกเพศ (Bisexual / Pansexual)</option><option value="Asexual">Asexual / ไม่เน้นแรงดึงดูดทางเพศ</option><option value="อื่นๆ">อื่นๆ</option></select></label>
+<label class="text-sm text-stone-300">อัตลักษณ์เพิ่มเติม (ไม่บังคับ)<select id="lgbtq" name="lgbtq_identity" class="mt-2 w-full rounded-xl border border-stone-700 bg-[#202023] px-4 py-3 text-white"><option value="">ไม่ประสงค์ระบุ</option><option value="Bottom">Bottom</option><option value="Top">Top</option><option value="Vers">Vers</option><option value="Fem">Fem</option><option value="Masc">Masc</option><option value="Androgynous">Androgynous</option><option value="อื่นๆ">อื่นๆ</option></select></label>
+<p class="text-xs text-stone-500 sm:col-span-2">ค่าเริ่มต้นของสถานที่คือกรุงเทพมหานคร พิกัด 13.7563, 100.5018 และเขตเวลา Asia/Bangkok (UTC+07:00)</p>
+<div id="msg" class="hidden rounded-xl border px-4 py-3 text-sm sm:col-span-2" role="status" aria-live="polite"></div>
+<button id="save" type="submit" class="sm:col-span-2 rounded-xl border border-amber-200/20 bg-gradient-to-r from-amber-200 to-yellow-500 py-3 font-semibold text-stone-950 transition hover:brightness-110 disabled:cursor-wait disabled:opacity-60">บันทึกและสร้างหนังสือของฉัน</button>
+</form></div>
 <script>
-const user = JSON.parse(localStorage.getItem('user')||'{}');
-document.getElementById('form').addEventListener('submit', async (e)=>{
+const form=document.getElementById('form'),msg=document.getElementById('msg'),button=document.getElementById('save');
+form.addEventListener('submit',async(e)=>{
  e.preventDefault();
- const token = localStorage.getItem('token');
- const body = {user_id:user.id||user.uid, birth_date:birth_date.value, birth_time:birth_time.value, birth_province:birth_province.value, lat:13.8,lng:102.06, gender:gender.value, lgbtq_identity:lgbtq.value};
- const res = await fetch('/api/profile/set',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(body)});
- if(res.ok) location.href='/dashboard.html';
+ const token=localStorage.getItem('token');
+ if(!token){msg.className='rounded-xl border border-red-400/30 bg-red-950/40 px-4 py-3 text-sm text-red-200 sm:col-span-2';msg.textContent='กรุณาเข้าสู่ระบบอีกครั้งก่อนบันทึก';return;}
+ button.disabled=true;button.textContent='กำลังบันทึก...';msg.className='hidden';
+ const province=form.elements.birth_province.value;
+ const coords=province==='กรุงเทพมหานคร'?{lat:13.7563,lng:100.5018}:province==='เชียงใหม่'?{lat:18.7883,lng:98.9853}:province==='ภูเก็ต'?{lat:7.8804,lng:98.3923}:province==='ขอนแก่น'?{lat:16.4419,lng:102.835}:province==='สระแก้ว'?{lat:13.824, lng:102.064}: {lat:13.7563,lng:100.5018};
+ try{
+  const res=await fetch('/api/profile/set',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'Accept':'application/json'},body:JSON.stringify({birth_date:form.elements.birth_date.value,birth_time:form.elements.birth_time.value,birth_province:province,...coords,timezone:'Asia/Bangkok',gender_current:form.elements.gender.value,sexual_orientation:form.elements.orientation.value,lgbtq_identity:form.elements.lgbtq_identity.value})});
+  const raw=await res.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{throw new Error(`เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง (HTTP ${res.status})`);}
+  if(!res.ok)throw new Error(data.error||`บันทึกไม่สำเร็จ (HTTP ${res.status})`);
+  msg.className='rounded-xl border border-emerald-400/30 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200 sm:col-span-2';msg.textContent='บันทึกข้อมูลดวงเกิดเรียบร้อยแล้ว กำลังไปหน้าถัดไป...';
+  setTimeout(()=>location.href='/dashboard.html',650);
+ }catch(err){msg.className='rounded-xl border border-red-400/30 bg-red-950/40 px-4 py-3 text-sm text-red-200 sm:col-span-2';msg.textContent=err.message||'เกิดข้อผิดพลาด กรุณาลองใหม่';button.disabled=false;button.textContent='บันทึกและสร้างหนังสือของฉัน';}
 });
-</script>
-</body></html>
+</script></body></html>
