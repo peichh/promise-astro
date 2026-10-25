@@ -9,27 +9,26 @@
 <div class="card">
 <h1>สมัครสมาชิก</h1>
 <p style="color:#6b7280;font-size:14px">สมัครด้วยอีเมลจริงเท่านั้น</p>
-<form id="form">
-<input id="email" type="email" placeholder="อีเมล" required value="theerapong.thana@gmail.com">
-<input id="password" type="password" placeholder="รหัสผ่าน 8 ตัวขึ้นไป" required>
-<input id="display_name" type="text" placeholder="ชื่อเล่นที่อยากให้เราเรียก" required value="พีช">
+<form id="form" autocomplete="on">
+<input id="email" name="email" type="email" placeholder="อีเมล" autocomplete="email" required>
+<input id="password" name="password" type="password" placeholder="รหัสผ่าน 8 ตัวขึ้นไป" autocomplete="new-password" minlength="8" required>
+<input id="display_name" name="display_name" type="text" placeholder="ชื่อเล่นที่อยากให้เราเรียก" autocomplete="name" required>
 <button id="btn" type="submit">สมัครและไปตั้งค่าดวงเกิด →</button>
-<div id="msg" class="msg"></div>
+<div id="msg" class="msg" role="status" aria-live="polite"></div>
 </form>
 <div style="margin-top:16px;text-align:center;font-size:13px"><a href="/login.html">มีบัญชีแล้ว? เข้าสู่ระบบ</a></div>
 </div>
 <script>
-const msg=document.getElementById('msg');const btn=document.getElementById('btn');
-document.getElementById('form').addEventListener('submit', async (e)=>{
- e.preventDefault();btn.disabled=true;msg.textContent='กำลังสมัคร...';
+const form=document.getElementById('form');const msg=document.getElementById('msg');const btn=document.getElementById('btn');
+form.addEventListener('submit',async(e)=>{
+ e.preventDefault();btn.disabled=true;msg.textContent='กำลังสมัคร...';msg.style.color='';
  try{
-   const res=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:password.value,display_name:display_name.value})});
-   const data=await res.json().catch(()=>({error:'no json'}));
-   if(res.ok){localStorage.setItem('token',data.token);localStorage.setItem('user',JSON.stringify(data.user));location.href='/onboarding.html';}
-   else if(res.status===409){msg.innerHTML='อีเมลนี้สมัครแล้ว <a href="/login.html">ไปล็อกอินเลย</a>';msg.style.color='#dc2626';}
-   else{msg.textContent=data.error||'สมัครไม่ได้';msg.style.color='#dc2626';console.log(data);}
- }catch(err){msg.textContent='API ไม่ตอบ: ต้อง deploy แบบ wrangler + ผูก DB';console.error(err);}
- btn.disabled=false;
+   const res=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:form.elements.email.value.trim(),password:form.elements.password.value,display_name:form.elements.display_name.value.trim()})});
+   const raw=await res.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{throw new Error(`เซิร์ฟเวอร์ตอบกลับไม่ใช่ JSON (HTTP ${res.status}): ${raw.slice(0,180)}`);}
+   if(!res.ok)throw new Error(data.error==='email exists'?'อีเมลนี้สมัครแล้ว':data.error||`สมัครไม่ได้ (HTTP ${res.status})`);
+   if(!data.token||!data.user)throw new Error('สมัครสำเร็จแต่เซิร์ฟเวอร์ไม่ส่งข้อมูลล็อกอินกลับมา');
+   localStorage.setItem('token',data.token);localStorage.setItem('user',JSON.stringify(data.user));location.href='/onboarding.html';
+ }catch(err){msg.textContent=err.message||'เกิดข้อผิดพลาด กรุณาลองใหม่';msg.style.color='#dc2626';console.error('Registration failed:',err);btn.disabled=false;}
 });
 </script>
 </body>
