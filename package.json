@@ -1,0 +1,17 @@
+{
+  "name": "promise-astrology",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public --d1=DB --r2=SLIPS --compatibility-date=2024-10-01",
+    "deploy": "wrangler pages deploy public --project-name=promise",
+    "db:migrate": "wrangler d1 execute promise-db --file=./schema.sql"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.2.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.70.0"
+  }
+}

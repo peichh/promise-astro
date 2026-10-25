@@ -1,0 +1,18 @@
+name = "promise"
+compatibility_date = "2024-10-01"
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "promise-db"
+database_id = "promise-db"
+
+[[r2_buckets]]
+binding = "SLIPS"
+bucket_name = "promise-slips"
+
+[vars]
+JWT_SECRET = "CHANGE_THIS_IN_CLOUDFLARE_DASHBOARD_TO_RANDOM_32_CHARS"
+ENV = "production"
+
+# Anti-scrape: Rate limit via D1

@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Book - PROMISE</title><script src="https://cdn.tailwindcss.com"></script>
+<style>body{overscroll-behavior:none} canvas{user-select:none; -webkit-user-select:none}</style>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col items-center p-4" oncontextmenu="return false">
+<div class="w-full max-w-3xl">
+<div class="flex justify-between items-center py-4"><span class="text-xs tracking-widest opacity-50">PROMISE • MEMBER ONLY • ANTI-COPY</span><span id="watermark" class="text-xs opacity-30"></span></div>
+<canvas id="bookCanvas" class="w-full bg-[#FFF8F0] rounded-[24px] shadow-2xl"></canvas>
+<p class="text-center text-[10px] opacity-30 mt-4">หน้านี้กันก๊อป: เรนเดอร์เป็น Canvas, ปิดคลิกขวา, ปิด Ctrl+C, มีลายน้ำชื่อคุณลอยอยู่, ถ้าแคปติดชื่อคุณทันที | Seed / Q / Blocks แสดงด้านล่างเพื่อตรวจสอบ</p>
+<div id="meta" class="flex gap-2 justify-center mt-3"><span class="px-3 py-1 rounded-full bg-white/10 text-[10px]">seed: 381904</span><span class="px-3 py-1 rounded-full bg-white/10 text-[10px]">q: ความรัก</span><span class="px-3 py-1 rounded-full bg-white/10 text-[10px]">blocks: 4</span></div>
+</div>
+<script>
+// Anti-copy + watermark demo
+const name = JSON.parse(localStorage.getItem('user')||'{"display_name":"มีนา"}').display_name||'มีนา';
+document.getElementById('watermark').innerText = name + ' • promise • ' + Date.now();
+const canvas = document.getElementById('bookCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width=800; canvas.height=1000;
+function draw(){
+ ctx.fillStyle='#FFF8F0'; ctx.fillRect(0,0,800,1000);
+ // Watermark repeating
+ ctx.fillStyle='rgba(0,0,0,0.04)'; ctx.font='16px Sarabun'; ctx.rotate(-0.3);
+ for(let y=-100;y<1200;y+=120){ for(let x=-100;x<1000;x+=200){ ctx.fillText(name+' • PROMISE', x, y); } }
+ ctx.setTransform(1,0,0,1,0,0);
+ // Real text - rendered as image, not selectable
+ ctx.fillStyle='#2C3E50'; ctx.font='22px Noto Serif Thai'; 
+ const lines = [
+  `${name} เกิดมาพร้อมคำถามที่ไม่มีใครสอนวิธีตอบ ต้องทดลองเจ็บเอง`,
+  `แต่จักรวาลกระซิบว่า ความรักครั้งนี้สอน ${name} ว่า`,
+  `การปล่อยมือก็เป็นการรักตัวเองรูปแบบหนึ่ง`,
+  ``,
+  `บทนี้ยังไม่จบ แต่ ${name} ไม่ต้องเป็นคนเดิม`,
+  `เพื่ออ่านหน้าต่อไปแล้ว`
+ ];
+ lines.forEach((l,i)=>{ ctx.fillText(l, 40, 100 + i*38); });
+}
+draw();
+// Block shortcuts
+document.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey) && ['c','s','p','u'].includes(e.key.toLowerCase()))){ e.preventDefault(); alert('หน้านี้กันก๊อปสำหรับ Member เท่านั้น'); } });
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ ctx.clearRect(0,0,800,1000); } else draw(); });
+</script>
+</body></html>

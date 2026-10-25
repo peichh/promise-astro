@@ -1,0 +1,88 @@
+{
+  "thai_pronouns": {
+    "เขา": {
+      "formal": "เขา",
+      "casual": "เค้า",
+      "self_ref": "เขาเอง",
+      "possessive": "ของเขา"
+    },
+    "เธอ": {
+      "formal": "เธอ",
+      "casual": "ตัวเอง",
+      "self_ref": "เธอเอง",
+      "possessive": "ของเธอ"
+    },
+    "คุณ": {
+      "formal": "คุณ",
+      "casual": "คุณ",
+      "self_ref": "คุณเอง",
+      "possessive": "ของคุณ"
+    },
+    "น้อง": {
+      "formal": "น้อง",
+      "casual": "น้อง",
+      "self_ref": "น้องเอง",
+      "possessive": "ของน้อง"
+    },
+    "พี่": {
+      "formal": "พี่",
+      "casual": "พี่",
+      "self_ref": "พี่เอง",
+      "possessive": "ของพี่"
+    },
+    "เรา": {
+      "formal": "เรา",
+      "casual": "เรา",
+      "self_ref": "เราเอง",
+      "possessive": "ของเรา"
+    }
+  },
+  "english_pronouns": {
+    "he/him": {
+      "subject": "he",
+      "object": "him",
+      "possessive": "his",
+      "reflexive": "himself"
+    },
+    "she/her": {
+      "subject": "she",
+      "object": "her",
+      "possessive": "her",
+      "reflexive": "herself"
+    },
+    "they/them": {
+      "subject": "they",
+      "object": "them",
+      "possessive": "their",
+      "reflexive": "themself"
+    },
+    "they/them (plural)": {
+      "subject": "they",
+      "object": "them",
+      "possessive": "their",
+      "reflexive": "themselves"
+    }
+  },
+  "perspective_rules": {
+    "Bottom": {
+      "love_view": "มุมมองแบบผู้รับที่มีอำนาจควบคุมจังหวะ - เน้นความรู้สึกปลอดภัย การเป็นคนถือหางเสือ",
+      "pronoun_tone": "อ่อนโยนแต่มีอำนาจ ใช้คำว่า 'ปล่อยให้' 'อนุญาตให้' 'ควบคุมจังหวะ'"
+    },
+    "Top": {
+      "love_view": "มุมมองแบบผู้ให้ที่ต้องดูแลความรู้สึกคนรับ - เน้นการนำแต่ฟัง",
+      "pronoun_tone": "มั่นคง อบอุ่น ใช้คำว่า 'ดูแล' 'พาไป' 'โอบอุ้ม'"
+    },
+    "Vers": {
+      "love_view": "มุมมองแบบสลับบทบาทได้ - เน้นความยืดหยุ่น",
+      "pronoun_tone": "สมดุล ใช้ได้ทั้งสองแบบ"
+    },
+    "Fem": {
+      "love_view": "มุมมองแบบเฟม - เน้นเสน่ห์ ความอ่อนโยนที่ทรงพลัง",
+      "pronoun_tone": "ละมุน นุ่มนวล แต่คม"
+    },
+    "Masc": {
+      "love_view": "มุมมองแบบแมสค์ - เน้นความมั่นคง การปกป้อง",
+      "pronoun_tone": "มั่นคง ตรงไปตรงมา"
+    }
+  }
+}

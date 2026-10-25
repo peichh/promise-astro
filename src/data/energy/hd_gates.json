@@ -1,0 +1,6 @@
+{
+  "Projector": {
+    "strategy": "Wait for Invitation",
+    "story": "{name} ไม่ต้องวิ่งตาม"
+  }
+}
