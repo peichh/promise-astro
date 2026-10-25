@@ -16,18 +16,16 @@
 <script>
 const form=document.getElementById('form'),msg=document.getElementById('msg'),button=document.getElementById('save');
 form.addEventListener('submit',async(e)=>{
- e.preventDefault();
- const token=localStorage.getItem('token');
+ e.preventDefault(); const token=localStorage.getItem('token');
  if(!token){msg.className='rounded-xl border border-red-400/30 bg-red-950/40 px-4 py-3 text-sm text-red-200 sm:col-span-2';msg.textContent='กรุณาเข้าสู่ระบบอีกครั้งก่อนบันทึก';return;}
  button.disabled=true;button.textContent='กำลังบันทึก...';msg.className='hidden';
  const province=form.elements.birth_province.value;
- const coords=province==='กรุงเทพมหานคร'?{lat:13.7563,lng:100.5018}:province==='เชียงใหม่'?{lat:18.7883,lng:98.9853}:province==='ภูเก็ต'?{lat:7.8804,lng:98.3923}:province==='ขอนแก่น'?{lat:16.4419,lng:102.835}:province==='สระแก้ว'?{lat:13.824, lng:102.064}: {lat:13.7563,lng:100.5018};
+ const coords=province==='กรุงเทพมหานคร'?{lat:13.7563,lng:100.5018}:province==='เชียงใหม่'?{lat:18.7883,lng:98.9853}:province==='ภูเก็ต'?{lat:7.8804,lng:98.3923}:province==='ขอนแก่น'?{lat:16.4419,lng:102.835}:province==='สระแก้ว'?{lat:13.824,lng:102.064}:{lat:13.7563,lng:100.5018};
  try{
   const res=await fetch('/api/profile/set',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'Accept':'application/json'},body:JSON.stringify({birth_date:form.elements.birth_date.value,birth_time:form.elements.birth_time.value,birth_province:province,...coords,timezone:'Asia/Bangkok',gender_current:form.elements.gender.value,sexual_orientation:form.elements.orientation.value,lgbtq_identity:form.elements.lgbtq_identity.value})});
   const raw=await res.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{throw new Error(`เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง (HTTP ${res.status})`);}
   if(!res.ok)throw new Error(data.error||`บันทึกไม่สำเร็จ (HTTP ${res.status})`);
-  msg.className='rounded-xl border border-emerald-400/30 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200 sm:col-span-2';msg.textContent='บันทึกข้อมูลดวงเกิดเรียบร้อยแล้ว กำลังไปหน้าถัดไป...';
-  setTimeout(()=>location.href='/dashboard.html',650);
+  msg.className='rounded-xl border border-emerald-400/30 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200 sm:col-span-2';msg.textContent='บันทึกข้อมูลดวงเกิดเรียบร้อยแล้ว กำลังไปหน้าถัดไป...';setTimeout(()=>location.href='/dashboard.html',650);
  }catch(err){msg.className='rounded-xl border border-red-400/30 bg-red-950/40 px-4 py-3 text-sm text-red-200 sm:col-span-2';msg.textContent=err.message||'เกิดข้อผิดพลาด กรุณาลองใหม่';button.disabled=false;button.textContent='บันทึกและสร้างหนังสือของฉัน';}
 });
 </script></body></html>
