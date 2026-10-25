@@ -1,89 +1,10 @@
 -- promise-db schema reference.
-CREATE TABLE IF NOT EXISTS users (
-  id TEXT PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL,
-  display_name TEXT,
-  created_at INTEGER NOT NULL,
-  status TEXT DEFAULT 'active'
-);
-CREATE TABLE IF NOT EXISTS sessions (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES users(id),
-  jwt_id TEXT NOT NULL,
-  created_at INTEGER NOT NULL,
-  expires_at INTEGER NOT NULL
-);
-
--- Authenticated birth-chart form persists to this dedicated table.
-CREATE TABLE IF NOT EXISTS promise_birth_profiles (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL UNIQUE REFERENCES users(id),
-  birth_date TEXT NOT NULL,
-  birth_time TEXT,
-  birth_province TEXT NOT NULL,
-  lat REAL NOT NULL,
-  lng REAL NOT NULL,
-  timezone TEXT NOT NULL DEFAULT 'Asia/Bangkok',
-  gender_current TEXT,
-  sexual_orientation TEXT,
-  lgbtq_identity TEXT,
-  created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS promise_profiles (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL UNIQUE REFERENCES users(id),
-  birth_date TEXT NOT NULL,
-  birth_time TEXT,
-  birth_province TEXT,
-  lat REAL,
-  lng REAL,
-  gender_birth TEXT,
-  gender_current TEXT,
-  pronouns_th TEXT,
-  pronouns_en TEXT,
-  pronouns_custom TEXT,
-  sexual_orientation TEXT,
-  attracted_to TEXT,
-  relationship_status TEXT,
-  lgbtq_identity TEXT,
-  lgbtq_role_detail TEXT,
-  created_at INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS promise_readings (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES users(id),
-  type TEXT NOT NULL,
-  question TEXT,
-  seed INTEGER,
-  blocks_json TEXT NOT NULL,
-  result_text TEXT NOT NULL,
-  created_at INTEGER NOT NULL
-);
-CREATE TABLE IF NOT EXISTS promise_subscriptions (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES users(id),
-  plan TEXT NOT NULL,
-  status TEXT NOT NULL,
-  expires_at INTEGER
-);
-CREATE TABLE IF NOT EXISTS promise_transactions (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES users(id),
-  amount INTEGER,
-  slip_r2_key TEXT,
-  status TEXT DEFAULT 'pending',
-  created_at INTEGER NOT NULL
-);
-CREATE TABLE IF NOT EXISTS promise_admin_allowlist (
-  email TEXT PRIMARY KEY,
-  role TEXT DEFAULT 'admin'
-);
-CREATE TABLE IF NOT EXISTS rate_limits (
-  key TEXT PRIMARY KEY,
-  count INTEGER,
-  reset_at INTEGER
-);
+CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY,email TEXT UNIQUE NOT NULL,password_hash TEXT NOT NULL,display_name TEXT,created_at INTEGER NOT NULL,status TEXT DEFAULT 'active',tier TEXT NOT NULL DEFAULT 'free',updated_at TEXT);
+CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),jwt_id TEXT NOT NULL,created_at INTEGER NOT NULL,expires_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS promise_birth_profiles (id TEXT PRIMARY KEY,user_id TEXT NOT NULL UNIQUE REFERENCES users(id),birth_date TEXT NOT NULL,birth_time TEXT,birth_province TEXT NOT NULL,birth_place TEXT NOT NULL,lat REAL NOT NULL,lng REAL NOT NULL,timezone TEXT NOT NULL DEFAULT 'Asia/Bangkok',gender_current TEXT,sexual_orientation TEXT,lgbtq_identity TEXT,created_at INTEGER NOT NULL,updated_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS promise_profiles (id TEXT PRIMARY KEY,user_id TEXT NOT NULL UNIQUE REFERENCES users(id),birth_date TEXT NOT NULL,birth_time TEXT,birth_province TEXT,lat REAL,lng REAL,gender_birth TEXT,gender_current TEXT,pronouns_th TEXT,pronouns_en TEXT,pronouns_custom TEXT,sexual_orientation TEXT,attracted_to TEXT,relationship_status TEXT,lgbtq_identity TEXT,lgbtq_role_detail TEXT,created_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS promise_readings (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),type TEXT NOT NULL,question TEXT,seed INTEGER,blocks_json TEXT NOT NULL,result_text TEXT NOT NULL,created_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS promise_subscriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),plan TEXT NOT NULL,status TEXT NOT NULL,expires_at INTEGER);
+CREATE TABLE IF NOT EXISTS promise_transactions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),amount INTEGER,slip_r2_key TEXT,status TEXT DEFAULT 'pending',created_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS promise_admin_allowlist (email TEXT PRIMARY KEY,role TEXT DEFAULT 'admin');
+CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY,count INTEGER,reset_at INTEGER);
