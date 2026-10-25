@@ -1,4 +1,4 @@
--- promise-db schema (already created, this is for reference & future migrate)
+-- promise-db schema reference.
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
@@ -15,6 +15,23 @@ CREATE TABLE IF NOT EXISTS sessions (
   expires_at INTEGER NOT NULL
 );
 
+-- Authenticated birth-chart form persists to this dedicated table.
+CREATE TABLE IF NOT EXISTS promise_birth_profiles (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL UNIQUE REFERENCES users(id),
+  birth_date TEXT NOT NULL,
+  birth_time TEXT,
+  birth_province TEXT NOT NULL,
+  lat REAL NOT NULL,
+  lng REAL NOT NULL,
+  timezone TEXT NOT NULL DEFAULT 'Asia/Bangkok',
+  gender_current TEXT,
+  sexual_orientation TEXT,
+  lgbtq_identity TEXT,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS promise_profiles (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL UNIQUE REFERENCES users(id),
@@ -23,24 +40,23 @@ CREATE TABLE IF NOT EXISTS promise_profiles (
   birth_province TEXT,
   lat REAL,
   lng REAL,
-  -- Detailed gender & pronoun system
-  gender_birth TEXT, -- เพศกำเนิด: ชาย, หญิง, Intersex
-  gender_current TEXT, -- เพศปัจจุบัน: ชาย, หญิง, ทรานส์หญิง, ทรานส์ชาย, Non-binary, Genderfluid, อื่นๆ
-  pronouns_th TEXT, -- สรรพนามไทย: เขา, เธอ, คุณ, น้อง, พี่, เค้า
-  pronouns_en TEXT, -- he/him, she/her, they/them, etc
-  pronouns_custom TEXT, -- สรรพนามกำหนดเอง
-  sexual_orientation TEXT, -- รสนิยม: ชอบผู้ชาย, ชอบผู้หญิง, ชอบทุกเพศ, ชอบตัวเอง, Asexual, Pansexual, Bisexual, ฯลฯ
-  attracted_to TEXT, -- ชอบเพศไหน: ชาย, หญิง, ทรานส์, Non-binary, ทุกเพศ
-  relationship_status TEXT, -- โสด, มีแฟน, คุยๆ, แต่งงาน, เปิด
-  lgbtq_identity TEXT, -- Bottom, Top, Vers, Fem, Masc, Androgynous, ฯลฯ
-  lgbtq_role_detail TEXT, -- รายละเอียดเพิ่มเติม เช่น Power Bottom, Soft Fem
+  gender_birth TEXT,
+  gender_current TEXT,
+  pronouns_th TEXT,
+  pronouns_en TEXT,
+  pronouns_custom TEXT,
+  sexual_orientation TEXT,
+  attracted_to TEXT,
+  relationship_status TEXT,
+  lgbtq_identity TEXT,
+  lgbtq_role_detail TEXT,
   created_at INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS promise_readings (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL REFERENCES users(id),
-  type TEXT NOT NULL, -- tarot, book, daily
+  type TEXT NOT NULL,
   question TEXT,
   seed INTEGER,
   blocks_json TEXT NOT NULL,
