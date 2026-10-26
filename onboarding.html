@@ -1,24 +1,8 @@
 <!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ตั้งค่าดวงเกิด - PROMISE</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-[#FFF8F0] p-6">
-<div class="max-w-2xl mx-auto bg-white rounded-[24px] p-8 shadow-xl mt-10">
-<h1 class="text-2xl font-bold">ตั้งค่าข้อมูลดวงเกิด ผูกกับรหัสของคุณ</h1><p class="text-sm opacity-60">ข้อมูลนี้จะถูกล็อคและใช้ประกอบทุกคำทำนาย แก้ไขได้แต่ต้องยืนยันตัวตน</p>
-<form id="form" class="mt-6 grid grid-cols-2 gap-4">
-<input id="birth_date" type="date" class="px-4 py-3 rounded-xl border col-span-2" required>
-<input id="birth_time" type="time" class="px-4 py-3 rounded-xl border">
-<select id="birth_province" class="px-4 py-3 rounded-xl border"><option>สระแก้ว</option><option>กรุงเทพ</option><option>เชียงใหม่</option><option>ขอนแก่น</option><option>ภูเก็ต</option><option>77 จังหวัด (โหลดจาก D1 ได้)</option></select>
-<input id="gender" placeholder="เพศ/อัตลักษณ์" class="px-4 py-3 rounded-xl border">
-<input id="lgbtq" placeholder="เช่น Bottom / Top / Non-binary" class="px-4 py-3 rounded-xl border">
-<button class="col-span-2 py-3 rounded-xl bg-black text-white">บันทึกและสร้างหนังสือของฉัน</button>
-</form>
-</div>
-<script>
-const user = JSON.parse(localStorage.getItem('user')||'{}');
-document.getElementById('form').addEventListener('submit', async (e)=>{
- e.preventDefault();
- const token = localStorage.getItem('token');
- const body = {user_id:user.id||user.uid, birth_date:birth_date.value, birth_time:birth_time.value, birth_province:birth_province.value, lat:13.8,lng:102.06, gender:gender.value, lgbtq_identity:lgbtq.value};
- const res = await fetch('/api/profile/set',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(body)});
- if(res.ok) location.href='/dashboard.html';
-});
-</script>
-</body></html>
+<body class="bg-[#FFF8F0] p-6"><div class="max-w-2xl mx-auto bg-white rounded-[24px] p-8 shadow-xl mt-10"><h1 class="text-2xl font-bold">ตั้งค่าข้อมูลดวงเกิด ผูกกับรหัสของคุณ</h1><p class="text-sm opacity-60">ข้อมูลนี้จะถูกล็อคและใช้ประกอบทุกคำทำนาย แก้ไขได้แต่ต้องยืนยันตัวตน</p>
+<form id="form" class="mt-6 grid grid-cols-2 gap-4"><input id="birth_date" type="date" class="px-4 py-3 rounded-xl border col-span-2" required><input id="birth_time" type="time" class="px-4 py-3 rounded-xl border"><select id="birth_province" class="px-4 py-3 rounded-xl border"><option>สระแก้ว</option><option>กรุงเทพ</option><option>เชียงใหม่</option><option>ขอนแก่น</option><option>ภูเก็ต</option><option>77 จังหวัด (โหลดจาก D1 ได้)</option></select>
+<label class="col-span-2">เพศกำเนิด<select id="sex_at_birth" class="px-4 py-3 rounded-xl border w-full"></select></label><label class="col-span-2">อัตลักษณ์ทางเพศ<select id="gender_identity" class="px-4 py-3 rounded-xl border w-full"></select></label><label class="col-span-2">รสนิยมทางเพศ<select id="sexual_orientation" class="px-4 py-3 rounded-xl border w-full"></select></label><label class="col-span-2">สถานะความสัมพันธ์<select id="relationship_status" class="px-4 py-3 rounded-xl border w-full"></select></label><label class="col-span-2">พลวัตและบทบาทในความสัมพันธ์<select id="relationship_role" class="px-4 py-3 rounded-xl border w-full"></select></label><button class="col-span-2 py-3 rounded-xl bg-black text-white">บันทึกและสร้างหนังสือของฉัน</button></form></div>
+<script type="module">import options from '/src/data/identity-options.json' with { type: 'json' };
+const user=JSON.parse(localStorage.getItem('user')||'{}');
+for(const [field,choices] of Object.entries(options)){const select=document.getElementById(field);select.innerHTML='<option value="">ไม่ระบุ</option>'+choices.map(({value,label})=>`<option value="${value}">${label}</option>`).join('');}
+document.getElementById('form').addEventListener('submit',async(e)=>{e.preventDefault();const token=localStorage.getItem('token');const body={user_id:user.id||user.uid,birth_date:birth_date.value,birth_time:birth_time.value,birth_province:birth_province.value,lat:13.8,lng:102.06,...Object.fromEntries(Object.keys(options).map(field=>[field,document.getElementById(field).value||'unspecified']))};const res=await fetch('/api/profile/set',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(body)});if(res.ok)location.href='/dashboard.html';});</script></body></html>
