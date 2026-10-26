@@ -1,4 +1,4 @@
-// Basic calculation tools - จุดเชื่อมต่อสำหรับเครื่องมือที่มีสูตร
+// Basic calculation tools - public exports
 export { calcWestern } from './western';
 export { calcBaZi } from './bazi';
 export { calcZiWei } from './ziwei';
@@ -8,3 +8,4 @@ export { drawTarot } from './tarot';
 export { drawLenormand } from './lenormand';
 export { castIChing } from './iching';
 export { calcSynastry } from './synastry';
+export { calcThai79, calcThai, calcVedic, calcGeneKeys, calcAstrocartography, calcSynastryProfiles } from './extended';
