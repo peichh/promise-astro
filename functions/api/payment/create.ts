@@ -1,42 +1,5 @@
 import { SignJWT } from 'jose';
-
-// Generate PromptPay payload (EMVCo) - simplified for Thai PromptPay ID (phone or national ID or eWallet)
-// For demo: use 0812345678 as merchant, amount dynamic
-function genPromptPayPayload(ppId, amount){
-  // Very simplified payload - for production use library promptpay-qr
-  // Format: 00 02 01 + 29 + 00 16 A000000677010111 + 01 PPID + 02 amount + 58 TH + 53 764 + 54 amount
-  // This is placeholder - frontend will use qrcode.js to render from string
-  // We return string that qrcode library can render
-  const id = ppId.replace(/[^0-9]/g,'');
-  let ppType = '01'; // phone
-  if (id.length==13) ppType='02'; // nat id
-  if (id.length==15) ppType='03'; // ewallet
-  // For simplicity, return promptpay:// + id + ?amount=
-  return `PROMPTPAY:${id}:${amount}`;
-}
-
-export async function onRequestPost(context){
-  const {DB} = context.env;
-  const body = await context.request.json();
-  const {user_id, plan, amount, promptpay_id} = body;
-  // plan: basic 299, premium 599 etc
-  const finalAmount = amount || (plan==='premium'?599:299);
-  const ppId = promptpay_id || context.env.PROMPTPAY_ID || '0812345678';
-  
-  const txId = crypto.randomUUID();
-  const now = Date.now();
-  const payload = genPromptPayPayload(ppId, finalAmount);
-  
-  await DB.prepare('INSERT INTO promise_transactions (id,user_id,amount,slip_r2_key,status,created_at) VALUES (?,?,?,?,?,?)')
-    .bind(txId, user_id, finalAmount, '', 'pending_qr', now).run();
-  
-  return new Response(JSON.stringify({
-    transaction_id: txId,
-    amount: finalAmount,
-    promptpay_id: ppId,
-    qr_payload: payload,
-    qr_image_note: 'Frontend uses qrcode.js to render this payload',
-    expires_in: 15*60, // 15 min
-    next_step: 'Upload slip to /api/payment/verify'
-  }), {headers:{'Content-Type':'application/json'}});
-}
+function tlv(id:string,value:string){const n=new TextEncoder().encode(value).length;return id+n.toString().padStart(2,'0')+value}
+function crc16(payload:string){let crc=0xffff;for(const byte of new TextEncoder().encode(payload)){crc^=byte<<8;for(let i=0;i<8;i++)crc=(crc&0x8000)?((crc<<1)^0x1021):(crc<<1);crc&=0xffff}return crc.toString(16).toUpperCase().padStart(4,'0')}
+export function genPromptPayPayload(rawId:string,amount?:number){const digits=rawId.replace(/\D/g,'');let type:string,id:string;if(digits.length===10){type='01';id='0066'+digits.slice(1)}else if(digits.length===13){type='02';id=digits}else if(digits.length===15){type='03';id=digits}else throw new Error('PromptPay recipient must be a 10-digit mobile, 13-digit national ID, or 15-digit e-wallet ID');const merchant=tlv('00','A000000677010111')+tlv(type,id);let payload=tlv('00','01')+tlv('01',amount?'12':'11')+tlv('29',merchant)+tlv('58','TH')+tlv('53','764');if(amount!==undefined){if(!Number.isFinite(amount)||amount<=0)throw new Error('Amount must be positive');payload+=tlv('54',amount.toFixed(2))}payload+='6304';return payload+crc16(payload)}
+export async function onRequestPost(context:{env:Record<string,any>;request:Request}){try{const {DB}=context.env;if(!DB)return new Response(JSON.stringify({error:'Payment service unavailable'}),{status:503});const body=await context.request.json() as Record<string,any>;const {user_id,plan}=body;const finalAmount=Number(plan==='premium'?599:299);const ppId=context.env.PROMPTPAY_ID||'0658622318';const payload=genPromptPayPayload(ppId,finalAmount);const txId=crypto.randomUUID(),now=Date.now();await DB.prepare('INSERT INTO promise_transactions (id,user_id,amount,slip_r2_key,status,created_at) VALUES (?,?,?,?,?,?)').bind(txId,user_id,finalAmount,'','pending_qr',now).run();return new Response(JSON.stringify({transaction_id:txId,amount:finalAmount,promptpay_id:ppId,qr_payload:payload,expires_in:900,next_step:'Upload slip to /api/payment/verify'}),{headers:{'Content-Type':'application/json'}})}catch(e){return new Response(JSON.stringify({error:e instanceof Error?e.message:'Unable to create payment'}),{status:400,headers:{'Content-Type':'application/json'}})}}
